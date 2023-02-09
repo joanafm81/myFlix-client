@@ -28444,8 +28444,8 @@ const LoginView = ({ onLoggedIn  })=>{
         // This prevents the default behavior of the form which is to reload the entire page
         event.preventDefault();
         const data = {
-            acess: username,
-            secret: password
+            Username: username,
+            Password: password
         };
         fetch("https://myflix-jfm.herokuapp.com/login", {
             method: "POST",
