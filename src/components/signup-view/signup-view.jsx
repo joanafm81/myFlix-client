@@ -35,7 +35,7 @@ export const SignupView = () => {
   };
 
   return (
-    <Form onSubmit={handleSignUp}>
+    <Form onSubmit={handleSignUp} className="my-3">
       <Form.Group controlId="formUSername">
         <Form.Label>Username:</Form.Label>
         <Form.Control
@@ -45,6 +45,7 @@ export const SignupView = () => {
           required
           minLength="5"
           pattern="[0-9a-zA-Z]{5,}"
+          placeholder="Username"
         />
       </Form.Group>
 
@@ -56,6 +57,7 @@ export const SignupView = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength="8"
+          placeholder="Password"
         />
       </Form.Group>
 
@@ -66,6 +68,7 @@ export const SignupView = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          placeholder="Email"
         />
       </Form.Group>
 
@@ -76,11 +79,12 @@ export const SignupView = () => {
           value={birthday}
           onChange={(e) => setBirthday(e.target.value)}
           required
+          placeholder="Birthday"
         />
       </Form.Group>
 
       <Button variant="primary" type="submit">
-        Submit
+        Signup
       </Button>
     </Form >
   );

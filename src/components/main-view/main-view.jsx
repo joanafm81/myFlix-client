@@ -3,7 +3,11 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
-import Row from "react-bootstrap/Row";
+import { Toolbar } from "../toolbar/toolbar";
+import { Row, Col } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
+
 
 export const MainView = () => {
 
@@ -13,26 +17,7 @@ export const MainView = () => {
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
-
-  /*useEffect(() => {
-    fetch("https://myflix-jfm.herokuapp.com/movies")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Movies from API:", data);
-        const moviesFromAPI = data.map((doc) => {
-          return {
-            id: doc._id,
-            Title: doc.Title,
-            Description: doc.Description,
-            Genre: doc.Genre,
-            Director: doc.Director,
-            ImageURL: doc.ImageURL,
-            Featured: doc.Featured
-          }
-        });
-        setMovies(moviesFromAPI);
-      });
-  }, []);*/
+  const [similarMovies, setSimilarMovies] = useState([]);
 
   useEffect(() => {
     if (!token) {
@@ -43,12 +28,103 @@ export const MainView = () => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((response) => response.json())
-      .then((movies) => {
-        setMovies(movies);
+      .then((moviesFromApi) => {
+        setMovies(moviesFromApi.map((doc) => {
+          return {
+            id: doc._id,
+            Title: doc.Title,
+            Description: doc.Description,
+            Genre: doc.Genre,
+            Director: doc.Director,
+            ImageURL: doc.ImageURL,
+            Featured: doc.Featured
+          }
+        }));
       });
   }, [token]);
 
-  if (!user) {
+  return (
+    <>
+      <Toolbar
+        user={user}
+        onLogoutClick={() => { setUser(null); setToken(null); localStorage.clear(); }} />
+
+      <Container>
+        <Row className="justify-content-md-center p-5">
+          {!user ? (
+            <Col md={5}>
+              <LoginView
+                onLoggedIn={(user, token) => {
+                  setUser(user);
+                  setToken(token);
+                }}
+              />
+              or
+              <SignupView />
+            </Col>
+          ) : selectedMovie ? (
+            <Col md={8}>
+              <MovieView
+                movie={selectedMovie} onBackClick={() => setSelectedMovie(null)}
+              />
+
+              <hr />
+              <h2>Similar Movies</h2>
+              {similarMovies.length > 0 &&
+                <Row>
+                  {similarMovies.map((movie) => (
+                    <Col className="mb-5" key={movie.id} md={3}>
+                      <MovieCard
+                        key={movie.id}
+                        movie={movie}
+                        onMovieClick={(newSelectedMovie) => {
+                          setSelectedMovie(newSelectedMovie);
+
+                          // the state for selectedMovie is not update here??
+                          //setSimilarMovies(movies.filter(checkGenre));
+                          setSimilarMovies(movies.filter(m => {
+                            return m.Genre.Name === newSelectedMovie.Genre.Name && m.id !== newSelectedMovie.id;
+                          }));
+                        }}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+              }
+              {similarMovies.length === 0 &&
+                <div>No similar movies found.</div>
+              }
+
+            </Col>
+          ) : movies.length === 0 ? (
+            <div>The list is empty!</div>
+          ) : (
+            // Main movie list
+            <>
+              {movies.map((movie) => (
+                <Col className="mb-5" key={movie.id} md={4} lg={3}>
+                  <MovieCard
+                    movie={movie}
+                    onMovieClick={(newSelectedMovie) => {
+                      setSelectedMovie(newSelectedMovie);
+
+                      // the state for selectedMovie is not update here??
+                      //setSimilarMovies(movies.filter(checkGenre));
+                      setSimilarMovies(movies.filter(m => {
+                        return m.Genre.Name === newSelectedMovie.Genre.Name && m.id !== newSelectedMovie.id;
+                      }));
+                    }} />
+                </Col>
+              ))}
+            </>)
+          }
+        </Row>
+      </Container>
+    </>
+  );
+
+
+  /*if (!user) {
     return (
       <>
         <LoginView
@@ -115,4 +191,5 @@ export const MainView = () => {
       <button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</button>
     </>
   );
+  */
 };
