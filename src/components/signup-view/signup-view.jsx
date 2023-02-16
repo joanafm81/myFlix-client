@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 export const SignupView = () => {
 
@@ -33,46 +35,57 @@ export const SignupView = () => {
   };
 
   return (
-    <form onSubmit={handleSignUp}>
-      <label>
-        Username:
-        <input
+    <Form onSubmit={handleSignUp} className="my-3">
+      <Form.Group controlId="formUSername">
+        <Form.Label>Username:</Form.Label>
+        <Form.Control
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
           minLength="5"
           pattern="[0-9a-zA-Z]{5,}"
+          placeholder="Username"
         />
-      </label>
-      <label>
-        Password:
-        <input type="password"
+      </Form.Group>
+
+      <Form.Group controlId="formPassword">
+        <Form.Label>Password:</Form.Label>
+        <Form.Control
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength="8"
+          placeholder="Password"
         />
-      </label>
-      <label>
-        Email:
-        <input
+      </Form.Group>
+
+      <Form.Group controlId="formEmail">
+        <Form.Label>Email:</Form.Label>
+        <Form.Control
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          placeholder="Email"
         />
-      </label>
-      <label>
-        Birthday:
-        <input
+      </Form.Group>
+
+      <Form.Group controlId="formBirthday">
+        <Form.Label>Birthday:</Form.Label>
+        <Form.Control
           type="date"
           value={birthday}
           onChange={(e) => setBirthday(e.target.value)}
           required
+          placeholder="Birthday"
         />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
+      </Form.Group>
+
+      <Button variant="primary" type="submit">
+        Signup
+      </Button>
+    </Form >
   );
 }

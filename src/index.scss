@@ -1,5 +1,17 @@
-$color: steelblue;
+$primary: #F2B807;
+$body-bg: #f8f9fa;
 
-.my-flix {
-  color: $color;
+
+@import '~bootstrap/scss/bootstrap.scss';
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.navbar .nav-link {
+  color: $primary;
+}
+
+label {
+  color: $secondary;
 }
