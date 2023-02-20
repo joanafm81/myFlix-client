@@ -3,10 +3,10 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
-import { Toolbar } from "../toolbar/toolbar";
+import { ProfileView } from "../profile-view/profile-view";
+import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 
@@ -17,6 +17,38 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
+
+  const addFavorite = (id) => {
+
+    fetch(`https://myflix-jfm.herokuapp.com/users/${user.Username}/movies/${id}`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }).then((response) => {
+      if (response.ok) {
+        alert("Update successful.");
+      } else {
+        alert("Update failed.");
+      }
+    });
+  };
+
+  const removeFavorite = (id) => {
+
+    fetch(`https://myflix-jfm.herokuapp.com/users/${user.Username}/movies/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }).then((response) => {
+      if (response.ok) {
+        alert("Delete successful.");
+      } else {
+        alert("Delete failed.");
+      }
+    });
+  };
 
   useEffect(() => {
     if (!token) {
@@ -44,7 +76,7 @@ export const MainView = () => {
 
   return (
     <BrowserRouter>
-      <Toolbar
+      <NavigationBar
         user={user}
         onLogoutClick={() => { setUser(null); setToken(null); localStorage.clear(); }} />
 
@@ -85,6 +117,20 @@ export const MainView = () => {
               }
             />
             <Route
+              path="/profile"
+              element={
+                <>
+                  {user ? (
+                    <Col md={5}>
+                      <ProfileView movies={movies} userData={user} userToken={token} onAddFavorite={addFavorite} onRemoveFavorite={removeFavorite} />
+                    </Col>
+                  ) : (
+                    <Navigate to="/login" />
+                  )}
+                </>
+              }
+            />
+            <Route
               path="/movies/:movieId"
               element={
                 <>
@@ -96,34 +142,9 @@ export const MainView = () => {
                     <Col md={8}>
                       <MovieView
                         movies={movies}
+                        userData={user}
+                        userToken={token}
                       />
-
-                      {/* <hr />
-                      <h2>Similar Movies</h2>
-                      {similarMovies.length > 0 &&
-                        <Row>
-                          {similarMovies.map((movie) => (
-                            <Col className="mb-5" key={movie.id} md={3}>
-                              <MovieCard
-                                key={movie.id}
-                                movie={movie}
-                                onMovieClick={(newSelectedMovie) => {
-                                  setSelectedMovie(newSelectedMovie);
-
-                                  // the state for selectedMovie is not update here??
-                                  //setSimilarMovies(movies.filter(checkGenre));
-                                  setSimilarMovies(movies.filter(m => {
-                                    return m.Genre.Name === newSelectedMovie.Genre.Name && m.id !== newSelectedMovie.id;
-                                  }));
-                                }}
-                              />
-                            </Col>
-                          ))}
-                        </Row>
-                      }
-                      {similarMovies.length === 0 &&
-                        <div>No similar movies found.</div>
-                      } */}
                     </Col>
                   )}
                 </>
@@ -142,16 +163,7 @@ export const MainView = () => {
                       {movies.map((movie) => (
                         <Col className="mb-5" key={movie.id} md={4} lg={3}>
                           <MovieCard
-                            movie={movie}
-                          // onMovieClick={(newSelectedMovie) => {
-                          //   setSelectedMovie(newSelectedMovie);
-
-                          //   // the state for selectedMovie is not update here??
-                          //   //setSimilarMovies(movies.filter(checkGenre));
-                          //   setSimilarMovies(movies.filter(m => {
-                          //     return m.Genre.Name === newSelectedMovie.Genre.Name && m.id !== newSelectedMovie.id;
-                          //   }));
-                          // }} 
+                            movie={movie} isFavorite={user.FavoriteMovies.includes(movie.id)} onAddFavorite={addFavorite} onRemoveFavorite={removeFavorite}
                           />
                         </Col>
                       ))}
