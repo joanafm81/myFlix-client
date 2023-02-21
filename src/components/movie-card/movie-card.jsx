@@ -1,27 +1,33 @@
 import PropTypes from "prop-types";
-import { Button, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
 import "./movie-card.scss";
 
-export const MovieCard = ({ movie, onMovieClick }) => {
+export const MovieCard = ({ movie, isFavorite, onAddFavorite, onRemoveFavorite }) => {
+
   return (
-    <Card className="h-100" onClick={() => { onMovieClick(movie) }}>
-      <Card.Img variant="left" src={movie.ImageURL} />
-      <Card.Body>
-        <Card.Title>{movie.Title}</Card.Title>
-        <Card.Subtitle className="mb-2 text-muted">{movie.Genre.Name}</Card.Subtitle>
-        <Card.Text className="text-truncate">{movie.Description}</Card.Text>
-        {/* <Button variant="link">
-          Details
-        </Button> */}
-      </Card.Body>
-    </Card>
-    /*<div
-      onClick={() => {
-        onMovieClick(movie);
-      }}
-    >
-      {movie.Title}
-    </div>*/
+    <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
+      <Card className="h-100">
+        <Card.Img variant="left" src={movie.ImageURL} />
+        <Card.Body>
+          <Card.Title>{movie.Title}</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">{movie.Genre.Name}</Card.Subtitle>
+          <Card.Text className="text-truncate text-muted">{movie.Description}</Card.Text>
+
+          {isFavorite ?
+            <Button variant="link" className="setFavorite" onClick={(e) => { e.preventDefault(); onRemoveFavorite(movie.id) }}>
+              <i className="fas fa-star"></i>
+            </Button>
+            :
+            <Button variant="link" className="setFavorite" onClick={(e) => { e.preventDefault(); onAddFavorite(movie.id) }}>
+              <i className="far fa-star"></i>
+            </Button>
+          }
+
+        </Card.Body>
+      </Card>
+    </Link>
   );
 };
 
@@ -31,5 +37,5 @@ MovieCard.propTypes = {
   movie: PropTypes.shape({
     Title: PropTypes.string
   }).isRequired,
-  onMovieClick: PropTypes.func.isRequired
+  // onMovieClick: PropTypes.func.isRequired
 };
