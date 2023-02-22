@@ -3,7 +3,7 @@ Client-side of a single-page, responsive movie application called myFlix which i
 
 # How to get the project running
 
-[myFlix-client] ()
+[myFlix-client] (https://myflix-jfm.netlify.app/)
 
 # How to test project using Parcel
 parcel src/index.html
