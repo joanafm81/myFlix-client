@@ -8,6 +8,7 @@ import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Form from "react-bootstrap/Form";
 
 
 export const MainView = () => {
@@ -17,6 +18,7 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
+  const [movieFilter, setFilter] = useState(null);
 
   const addFavorite = (id) => {
 
@@ -27,6 +29,10 @@ export const MainView = () => {
       }
     }).then((response) => {
       if (response.ok) {
+        let updatedUser = user;
+        updatedUser.FavoriteMovies.push(id);
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
         alert("Update successful.");
       } else {
         alert("Update failed.");
@@ -43,6 +49,11 @@ export const MainView = () => {
       }
     }).then((response) => {
       if (response.ok) {
+        let updatedUser = user;
+        let indexToRemove = updatedUser.FavoriteMovies.indexOf(id);
+        updatedUser.FavoriteMovies.splice(indexToRemove, 1);
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
         alert("Delete successful.");
       } else {
         alert("Delete failed.");
@@ -160,7 +171,16 @@ export const MainView = () => {
                     <Col>The list is empty!</Col>
                   ) : (
                     <>
-                      {movies.map((movie) => (
+                      <Form>
+                        <Form.Group controlId="formSearch" className="mb-3">
+                          <Form.Control
+                            type="text"
+                            onChange={(e) => setFilter(e.target.value)}
+                            placeholder="Search"
+                          />
+                        </Form.Group>
+                      </Form>
+                      {movies.filter(m => !movieFilter || m.Title.toLowerCase().indexOf(movieFilter.toLowerCase()) >= 0).map((movie) => (
                         <Col className="mb-5" key={movie.id} md={4} lg={3}>
                           <MovieCard
                             movie={movie} isFavorite={user.FavoriteMovies.includes(movie.id)} onAddFavorite={addFavorite} onRemoveFavorite={removeFavorite}
@@ -175,6 +195,6 @@ export const MainView = () => {
           </Routes>
         </Row>
       </Container>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 };

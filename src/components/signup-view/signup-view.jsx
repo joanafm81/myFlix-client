@@ -35,57 +35,60 @@ export const SignupView = () => {
   };
 
   return (
-    <Form onSubmit={handleSignUp} className="my-3">
-      <Form.Group controlId="formUSername" className="mb-3">
-        <Form.Label>Username:</Form.Label>
-        <Form.Control
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          minLength="5"
-          pattern="[0-9a-zA-Z]{5,}"
-          placeholder="Username"
-        />
-      </Form.Group>
+    <>
+      <h1>Signup</h1>
+      <Form onSubmit={handleSignUp} className="my-3">
+        <Form.Group controlId="formUSername" className="mb-3">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            minLength="5"
+            pattern="[0-9a-zA-Z]{5,}"
+            placeholder="Username"
+          />
+        </Form.Group>
 
-      <Form.Group controlId="formPassword" className="mb-3">
-        <Form.Label>Password:</Form.Label>
-        <Form.Control
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          minLength="8"
-          placeholder="Password"
-        />
-      </Form.Group>
+        <Form.Group controlId="formPassword" className="mb-3">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength="8"
+            placeholder="Password"
+          />
+        </Form.Group>
 
-      <Form.Group controlId="formEmail" className="mb-3">
-        <Form.Label>Email:</Form.Label>
-        <Form.Control
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          placeholder="Email"
-        />
-      </Form.Group>
+        <Form.Group controlId="formEmail" className="mb-3">
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="Email"
+          />
+        </Form.Group>
 
-      <Form.Group controlId="formBirthday" className="mb-3">
-        <Form.Label>Birthday:</Form.Label>
-        <Form.Control
-          type="date"
-          value={birthday}
-          onChange={(e) => setBirthday(e.target.value)}
-          required
-          placeholder="Birthday"
-        />
-      </Form.Group>
+        <Form.Group controlId="formBirthday" className="mb-3">
+          <Form.Label>Birthday</Form.Label>
+          <Form.Control
+            type="date"
+            value={birthday}
+            onChange={(e) => setBirthday(e.target.value)}
+            required
+            placeholder="Birthday"
+          />
+        </Form.Group>
 
-      <Button variant="primary" type="submit">
-        Signup
-      </Button>
-    </Form >
+        <Button variant="primary" type="submit">
+          Signup
+        </Button>
+      </Form >
+    </>
   );
 }

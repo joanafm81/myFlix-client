@@ -28,7 +28,9 @@ export const UpdateUser = ({ userData, handleUpdate }) => {
 
       <Form className="my-3"
         onSubmit={handleSubmit}>
-        {/* <Form.Group controlId="formUSername">
+        {/* COMMENTED BECAUSE THE API DOESN'T CHANGE THE USERNAME
+
+        <Form.Group controlId="formUSername">
           <Form.Label>Username:</Form.Label>
           <Form.Control
             type="text"

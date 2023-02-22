@@ -66,12 +66,6 @@ export const ProfileView = ({ movies, userData, userToken, onAddFavorite, onRemo
       {/* User form */}
 
       <UpdateUser userData={userData} handleUpdate={handleUpdate} />
-
-
     </>
-
-
-
   )
-
 }
